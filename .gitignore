@@ -1,0 +1,13 @@
+log/
+log.DEV/
+log.STABLE/
+build/
+install/
+go/
+agent/
+ristretto/
+azure-sdk-for-go/
+machineid/
+pty/
+go.work
+go.work.sum

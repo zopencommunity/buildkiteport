@@ -1,0 +1,101 @@
+# bump: buildkite-version /BUILDKITE_VERSION="(.*)"/ https://github.com/buildkite/agent.git|semver:*
+BUILDKITE_VERSION="3.59.0"
+
+export ZOPEN_STABLE_TAG="v${BUILDKITE_VERSION}"
+export ZOPEN_STABLE_URL="https://github.com/buildkite/agent.git"
+export ZOPEN_STABLE_DEPS="comp_go git"
+export ZOPEN_BUILD_LINE="STABLE"
+export ZOPEN_CATEGORIES="development"
+export ZOPEN_NAME="buildkite-agent"
+
+export ZOPEN_COMP=GO
+export ZOPEN_CONFIGURE="zopen_config"
+export ZOPEN_CONFIGURE_MINIMAL=1
+export ZOPEN_MAKE="go"
+export ZOPEN_MAKE_OPTS="build -o buildkite-agent ./agent"
+# export ZOPEN_MAKE_OPTS="build ./agent"
+export ZOPEN_MAKE_MINIMAL=1
+export ZOPEN_INSTALL="zopen_install"
+export ZOPEN_CHECK="skip"
+export ZOPEN_CLEAN="zopen_clean"
+
+zopen_init()
+{
+  export CGO_ENABLED=0
+  export GOBIN=$ZOPEN_INSTALL_DIR/bin
+  mkdir -p \$ZOPEN_INSTALL_DIR/bin
+  unset CC CXX
+}
+
+zopen_config()
+{
+  RISTRETTO_TAG=$(cat go.mod | grep ristretto | cut -d ' ' -f 2)
+  MACHINEID_TAG=$(cat go.mod | grep machineid | cut -d ' ' -f 2)
+  AZURESDK=$(cat go.mod | grep azure-sdk-for-go/sdk/storage/azblob | cut -d ' ' -f 2)
+  AZURESDK_TAG="sdk-storage-azblob-${AZURESDK}"
+  PTY_TAG=$(cat go.mod | grep pty | cut -d ' ' -f 2)
+  
+  cd .. && echo ""
+  git clone https://github.com/outcaste-io/ristretto.git
+  cd ristretto && git -c advice.detachedHead=false checkout $RISTRETTO_TAG
+  git apply -v ../deps-patches/ristretto-$RISTRETTO_TAG.patch
+
+  cd .. && echo ""
+  git clone https://github.com/denisbrodbeck/machineid.git
+  cd machineid && git -c advice.detachedHead=false checkout $MACHINEID_TAG
+  go mod init && go mod tidy
+  git apply -v ../deps-patches/machineid-$MACHINEID_TAG.patch
+
+  cd .. && echo ""
+  git clone https://github.com/Azure/azure-sdk-for-go.git
+  cd azure-sdk-for-go && git -c advice.detachedHead=false checkout "sdk/storage/azblob/$AZURESDK"
+  git apply -v ../deps-patches/azure-sdk-for-go-$AZURESDK_TAG.patch
+
+  cd .. && echo ""
+  git clone https://github.com/creack/pty.git
+  cd pty && git -c advice.detachedHead=false checkout $PTY_TAG
+  git apply -v ../deps-patches/pty-$PTY_TAG.patch
+
+  cd .. && echo ""
+  go work init ./agent ./ristretto ./machineid ./azure-sdk-for-go/sdk/storage/azblob ./pty
+}
+
+zopen_install()
+{
+  echo "here-at-install $PWD"
+  cd agent
+  go install
+}
+
+zopen_post_install()
+{
+  echo "here-at-post $PWD"
+  echo "here-at-post $ZOPEN_INSTALL_DIR"
+  mv \$ZOPEN_INSTALL_DIR/bin/agent \$ZOPEN_INSTALL_DIR/bin/buildkite-agent
+}
+
+zopen_clean()
+{
+  echo ".:In zopen_clean:. $PWD"
+  # rm -rf go.work go.work.sum
+}
+
+zopen_check_results()
+{
+  dir="$1"
+  pfx="$2"
+  chk="$1/$2_check.log"
+
+  # Echo the following information to gauge build health
+  echo "actualFailures:0"
+  echo "totalTests:1"
+  echo "expectedFailures:0"
+  echo "expectedTotalTests:1"
+}
+
+zopen_get_version()
+{
+  # Modify to echo the version of your tool/library
+  # Rather than hardcoding the version, obtain the version by running the tool/library
+  echo "${BUILDKITE_VERSION}"
+}
