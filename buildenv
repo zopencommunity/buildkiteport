@@ -13,7 +13,6 @@ export ZOPEN_CONFIGURE="zopen_config"
 export ZOPEN_CONFIGURE_MINIMAL=1
 export ZOPEN_MAKE="go"
 export ZOPEN_MAKE_OPTS="build -o buildkite-agent ./agent"
-# export ZOPEN_MAKE_OPTS="build ./agent"
 export ZOPEN_MAKE_MINIMAL=1
 export ZOPEN_INSTALL="zopen_install"
 export ZOPEN_CHECK="skip"
