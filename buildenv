@@ -71,7 +71,7 @@ zopen_post_install()
 {
   echo "here-at-post $PWD"
   echo "here-at-post $ZOPEN_INSTALL_DIR"
-  mv \$ZOPEN_INSTALL_DIR/bin/agent \$ZOPEN_INSTALL_DIR/bin/buildkite-agent
+  mv $ZOPEN_INSTALL_DIR/bin/agent $ZOPEN_INSTALL_DIR/bin/buildkite-agent
 }
 
 zopen_clean()
