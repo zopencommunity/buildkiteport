@@ -38,23 +38,23 @@ zopen_config()
   cd .. && echo ""
   git clone https://github.com/outcaste-io/ristretto.git
   cd ristretto && git -c advice.detachedHead=false checkout $RISTRETTO_TAG
-  git apply -v ../deps-patches/ristretto-$RISTRETTO_TAG.patch
+  git apply -v ../deps-patches/ristretto--$RISTRETTO_TAG.patch
 
   cd .. && echo ""
   git clone https://github.com/denisbrodbeck/machineid.git
   cd machineid && git -c advice.detachedHead=false checkout $MACHINEID_TAG
   go mod init && go mod tidy
-  git apply -v ../deps-patches/machineid-$MACHINEID_TAG.patch
+  git apply -v ../deps-patches/machineid--$MACHINEID_TAG.patch
 
   cd .. && echo ""
   git clone https://github.com/Azure/azure-sdk-for-go.git
   cd azure-sdk-for-go && git -c advice.detachedHead=false checkout "sdk/storage/azblob/$AZURESDK"
-  git apply -v ../deps-patches/azure-sdk-for-go-$AZURESDK_TAG.patch
+  git apply -v ../deps-patches/azure-sdk-for-go--$AZURESDK_TAG.patch
 
   cd .. && echo ""
   git clone https://github.com/creack/pty.git
   cd pty && git -c advice.detachedHead=false checkout $PTY_TAG
-  git apply -v ../deps-patches/pty-$PTY_TAG.patch
+  git apply -v ../deps-patches/pty--$PTY_TAG.patch
 
   cd .. && echo ""
   go work init ./agent ./ristretto ./machineid ./azure-sdk-for-go/sdk/storage/azblob ./pty
