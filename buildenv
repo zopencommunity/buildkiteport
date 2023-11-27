@@ -22,7 +22,7 @@ zopen_init()
 {
   export CGO_ENABLED=0
   export GOBIN=$ZOPEN_INSTALL_DIR/bin
-  mkdir -p \$ZOPEN_INSTALL_DIR/bin
+  mkdir -p $ZOPEN_INSTALL_DIR/bin
   unset CC CXX
 }
 
