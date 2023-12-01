@@ -83,7 +83,7 @@ zopen_post_install()
 
 zopen_clean()
 {
-  echo ".:In zopen_clean:. $PWD"
+  echo "here-at-clean $PWD"
   # rm -rf go.work go.work.sum
   chmod -R 755 go
   rm -rf go* buildkite-agent agent ristretto machineid azure-sdk-for-go pty
