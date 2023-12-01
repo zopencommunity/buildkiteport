@@ -38,7 +38,7 @@ zopen_config()
   git clone https://github.com/outcaste-io/ristretto.git
   echo "Checking out $RISTRETTO_TAG"
   cd ristretto && git -c advice.detachedHead=false checkout $RISTRETTO_TAG
-  curl -s -o ristretto--$RISTRETTO_TAG.patch https://raw.githubusercontent.com/ZOSOpenTools/wharf/main/deps-patches/ristretto--v0.2.3.patch
+  curl -s -o ristretto--$RISTRETTO_TAG.patch "https://raw.githubusercontent.com/ZOSOpenTools/wharf/main/deps-patches/ristretto--$RISTRETTO_TAG.patch"
   git apply -v ristretto--$RISTRETTO_TAG.patch
 
   cd .. && echo ""
@@ -46,21 +46,21 @@ zopen_config()
   echo "Checking out $MACHINEID_TAG"
   cd machineid && git -c advice.detachedHead=false checkout $MACHINEID_TAG
   go mod init && go mod tidy
-  curl -s -o machineid--$MACHINEID_TAG.patch https://raw.githubusercontent.com/ZOSOpenTools/wharf/main/deps-patches/machineid--v1.0.1.patch
+  curl -s -o machineid--$MACHINEID_TAG.patch "https://raw.githubusercontent.com/ZOSOpenTools/wharf/main/deps-patches/machineid--$MACHINEID_TAG.patch"
   git apply -v machineid--$MACHINEID_TAG.patch
 
   cd .. && echo ""
   git clone https://github.com/Azure/azure-sdk-for-go.git
   echo "Checking out $AZURESDK_TAG"
   cd azure-sdk-for-go && git -c advice.detachedHead=false checkout "sdk/storage/azblob/$AZURESDK"
-  curl -s -o azure-sdk-for-go--$AZURESDK_TAG.patch https://raw.githubusercontent.com/ZOSOpenTools/wharf/main/deps-patches/azure-sdk-for-go--sdk-storage-azblob-v1.2.0.patch
+  curl -s -o azure-sdk-for-go--$AZURESDK_TAG.patch "https://raw.githubusercontent.com/ZOSOpenTools/wharf/main/deps-patches/azure-sdk-for-go--sdk-storage-azblob-$AZURESDK.patch"
   git apply -v azure-sdk-for-go--$AZURESDK_TAG.patch
 
   cd .. && echo ""
   git clone https://github.com/creack/pty.git
   echo "Checking out $PTY_TAG"
   cd pty && git -c advice.detachedHead=false checkout $PTY_TAG
-  # curl -s -o pty--$PTY_TAG.patch https://raw.githubusercontent.com/ZOSOpenTools/wharf/main/deps-patches/pty--v1.1.20.patch
+  # curl -s -o pty--$PTY_TAG.patch "https://raw.githubusercontent.com/ZOSOpenTools/wharf/main/deps-patches/pty--$PTY_TAG.patch"
   git apply -v ../deps-patches/pty--$PTY_TAG.patch
 
   cd .. && echo ""
