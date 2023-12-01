@@ -1,9 +1,9 @@
 # bump: buildkite-version /BUILDKITE_VERSION="(.*)"/ https://github.com/buildkite/agent.git|semver:*
-BUILDKITE_VERSION="3.59.0"
+BUILDKITE_VERSION="3.60.0"
 
 export ZOPEN_STABLE_TAG="v${BUILDKITE_VERSION}"
 export ZOPEN_STABLE_URL="https://github.com/buildkite/agent.git"
-export ZOPEN_STABLE_DEPS="comp_go git"
+export ZOPEN_STABLE_DEPS="comp_go git curl"
 export ZOPEN_BUILD_LINE="STABLE"
 export ZOPEN_CATEGORIES="development"
 export ZOPEN_NAME="buildkite"
@@ -36,23 +36,31 @@ zopen_config()
   
   cd .. && echo ""
   git clone https://github.com/outcaste-io/ristretto.git
+  echo "Checking out $RISTRETTO_TAG"
   cd ristretto && git -c advice.detachedHead=false checkout $RISTRETTO_TAG
-  git apply -v ../deps-patches/ristretto--$RISTRETTO_TAG.patch
+  curl -s -o ristretto--$RISTRETTO_TAG.patch "https://raw.githubusercontent.com/ZOSOpenTools/wharf/main/deps-patches/ristretto--$RISTRETTO_TAG.patch"
+  git apply -v ristretto--$RISTRETTO_TAG.patch
 
   cd .. && echo ""
   git clone https://github.com/denisbrodbeck/machineid.git
+  echo "Checking out $MACHINEID_TAG"
   cd machineid && git -c advice.detachedHead=false checkout $MACHINEID_TAG
   go mod init && go mod tidy
-  git apply -v ../deps-patches/machineid--$MACHINEID_TAG.patch
+  curl -s -o machineid--$MACHINEID_TAG.patch "https://raw.githubusercontent.com/ZOSOpenTools/wharf/main/deps-patches/machineid--$MACHINEID_TAG.patch"
+  git apply -v machineid--$MACHINEID_TAG.patch
 
   cd .. && echo ""
   git clone https://github.com/Azure/azure-sdk-for-go.git
+  echo "Checking out $AZURESDK_TAG"
   cd azure-sdk-for-go && git -c advice.detachedHead=false checkout "sdk/storage/azblob/$AZURESDK"
-  git apply -v ../deps-patches/azure-sdk-for-go--$AZURESDK_TAG.patch
+  curl -s -o azure-sdk-for-go--$AZURESDK_TAG.patch "https://raw.githubusercontent.com/ZOSOpenTools/wharf/main/deps-patches/azure-sdk-for-go--$AZURESDK_TAG.patch"
+  git apply -v azure-sdk-for-go--$AZURESDK_TAG.patch
 
   cd .. && echo ""
   git clone https://github.com/creack/pty.git
+  echo "Checking out $PTY_TAG"
   cd pty && git -c advice.detachedHead=false checkout $PTY_TAG
+  # curl -s -o pty--$PTY_TAG.patch "https://raw.githubusercontent.com/ZOSOpenTools/wharf/main/deps-patches/pty--$PTY_TAG.patch"
   git apply -v ../deps-patches/pty--$PTY_TAG.patch
 
   cd .. && echo ""
@@ -77,6 +85,8 @@ zopen_clean()
 {
   echo ".:In zopen_clean:. $PWD"
   # rm -rf go.work go.work.sum
+  chmod -R 755 go
+  rm -rf go* buildkite-agent agent ristretto machineid azure-sdk-for-go pty
 }
 
 zopen_check_results()
