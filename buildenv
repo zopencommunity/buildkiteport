@@ -60,8 +60,8 @@ zopen_config()
   git clone https://github.com/creack/pty.git
   echo "Checking out $PTY_TAG"
   cd pty && git -c advice.detachedHead=false checkout $PTY_TAG
-  # curl -s -o pty--$PTY_TAG.patch "https://raw.githubusercontent.com/ZOSOpenTools/wharf/main/deps-patches/pty--$PTY_TAG.patch"
-  git apply -v ../deps-patches/pty--$PTY_TAG.patch
+  curl -s -o pty--$PTY_TAG.patch "https://raw.githubusercontent.com/ZOSOpenTools/wharf/main/deps-patches/pty--$PTY_TAG.patch"
+  git apply -v pty--$PTY_TAG.patch
 
   cd .. && echo ""
   go work init ./agent ./ristretto ./machineid ./azure-sdk-for-go/sdk/storage/azblob ./pty
