@@ -1,5 +1,5 @@
 # bump: buildkite-version /BUILDKITE_VERSION="(.*)"/ https://github.com/buildkite/agent.git|semver:*
-BUILDKITE_VERSION="3.61.0"
+BUILDKITE_VERSION="3.65.0"
 
 export ZOPEN_STABLE_TAG="v${BUILDKITE_VERSION}"
 export ZOPEN_STABLE_URL="https://github.com/buildkite/agent.git"
