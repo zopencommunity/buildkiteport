@@ -3,7 +3,7 @@ BUILDKITE_VERSION="3.61.0"
 
 export ZOPEN_STABLE_TAG="v${BUILDKITE_VERSION}"
 export ZOPEN_STABLE_URL="https://github.com/buildkite/agent.git"
-export ZOPEN_STABLE_DEPS="comp_go git curl"
+export ZOPEN_STABLE_DEPS="check_go git curl"
 export ZOPEN_BUILD_LINE="STABLE"
 export ZOPEN_CATEGORIES="development"
 export ZOPEN_NAME="buildkite"
